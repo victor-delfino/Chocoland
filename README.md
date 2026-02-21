@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# 🍫 ChocoLand — Landing Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Landing page de chocolates artesanais construída com **React**, **TypeScript** e **Tailwind CSS**.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Preview
 
-## React Compiler
+A página inclui:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Header** — navegação fixa com efeito de vidro (backdrop-blur)
+- **Hero** — seção principal com headline, subtítulo e CTA
+- **Features** — grid responsivo de benefícios (6 cards)
+- **Call to Action** — formulário de e-mail com renderização condicional
+- **Footer** — rodapé com 3 colunas (Grid)
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Tecnologia                                   | Função                    |
+| -------------------------------------------- | ------------------------- |
+| [React 19](https://react.dev)                | Biblioteca de UI          |
+| [TypeScript](https://www.typescriptlang.org) | Tipagem estática          |
+| [Tailwind CSS 4](https://tailwindcss.com)    | Estilização utility-first |
+| [Vite 7](https://vite.dev)                   | Build tool + dev server   |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Estrutura do Projeto
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/
+│   ├── Header.tsx          # Navegação principal
+│   └── FeatureCard.tsx     # Card reutilizável (props)
+├── sections/
+│   ├── Hero.tsx            # Seção principal
+│   ├── Features.tsx        # Grid de benefícios (map + key)
+│   ├── CallToAction.tsx    # Formulário com useState
+│   └── Footer.tsx          # Rodapé
+├── App.tsx                 # Componente raiz
+├── main.tsx                # Ponto de entrada
+└── index.css               # Importação do Tailwind
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Como Rodar
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Instalar dependências
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Iniciar servidor de desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
 ```
+
+## Conceitos React Aplicados
+
+- Componentes funcionais
+- Props com interfaces TypeScript
+- `useState` (estado do formulário)
+- Renderização condicional (ternário)
+- Listas com `.map()` e `key`
+- Controlled inputs
+- Eventos (`onChange`, `onSubmit`)
+
+## Licença
+
+MIT
