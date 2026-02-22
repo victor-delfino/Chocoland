@@ -1,0 +1,142 @@
+# 🍫 ChocoLand
+
+Landing page de chocolates artesanais com sistema de newsletter integrado via mensageria.
+
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)
+![Express](https://img.shields.io/badge/Express-5-000?logo=express)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4-FF6600?logo=rabbitmq)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+
+## Visão Geral
+
+| Camada | Tecnologia | Descrição |
+|--------|-----------|-----------|
+| **Frontend** | React + Tailwind | Landing page responsiva com 7 seções |
+| **Backend** | Express + TypeScript | API REST que publica mensagens no RabbitMQ |
+| **Mensageria** | RabbitMQ | Broker de mensagens (fila `newsletter_subscriptions`) |
+| **Worker** | Node.js | Consumidor que processa inscrições da fila |
+| **Infra** | Docker Compose | Orquestra o RabbitMQ localmente |
+
+## Arquitetura
+
+```
+┌─────────────┐  POST   ┌──────────────┐ publish ┌──────────────┐ consume ┌──────────────┐
+│   React     │────────▶│   Express    │────────▶│   RabbitMQ   │────────▶│   Worker     │
+│  (frontend) │         │   (API)      │         │   (broker)   │         │ (consumidor) │
+│  :5173      │         │  :3001       │         │  :5672       │         │              │
+└─────────────┘         └──────────────┘         └──────────────┘         └──────────────┘
+                                                  Painel: :15672
+```
+
+## Estrutura do Projeto
+
+```
+Chocoland/
+├── docker-compose.yml
+├── react/                          # Frontend
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Header.tsx          # Navegação com Logo SVG
+│   │   │   ├── Logo.tsx            # Logo em SVG inline
+│   │   │   └── FeatureCard.tsx     # Card reutilizável (props)
+│   │   ├── sections/
+│   │   │   ├── Hero.tsx            # Seção principal
+│   │   │   ├── Showcase.tsx        # Carrossel de chocolates (useState)
+│   │   │   ├── Features.tsx        # Grid de benefícios (map + key)
+│   │   │   ├── CallToAction.tsx    # Formulário com renderização condicional
+│   │   │   ├── Newsletter.tsx      # Inscrição integrada ao backend
+│   │   │   └── Footer.tsx          # Rodapé
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   └── package.json
+└── backend/                        # API + Worker
+    ├── src/
+    │   ├── server.ts               # Express — POST /api/subscribe
+    │   ├── worker.ts               # Consumidor da fila RabbitMQ
+    │   └── rabbitmq.ts             # Módulo de conexão (reutilizável)
+    ├── package.json
+    └── tsconfig.json
+```
+
+## Como Rodar
+
+### Pré-requisitos
+
+- Node.js 18+
+- Docker Desktop
+
+### 1. RabbitMQ
+
+```bash
+docker compose up -d
+```
+
+Painel de gerenciamento: http://localhost:15672 (login: `chocoland` / `chocoland123`)
+
+### 2. Backend
+
+```bash
+cd backend
+npm install
+npm run dev       # API em http://localhost:3001
+```
+
+### 3. Worker (em outro terminal)
+
+```bash
+cd backend
+npm run worker    # Consome mensagens da fila
+```
+
+### 4. Frontend
+
+```bash
+cd react
+npm install
+npm run dev       # App em http://localhost:5173
+```
+
+## Endpoints da API
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| `GET` | `/api/health` | Health check + status do RabbitMQ |
+| `POST` | `/api/subscribe` | Inscreve email na newsletter (publica na fila) |
+
+**Exemplo:**
+
+```bash
+curl -X POST http://localhost:3001/api/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{"email": "teste@email.com", "name": "Hugo"}'
+```
+
+## Conceitos Aplicados
+
+### React
+- Componentes funcionais e componentização
+- Props com interfaces TypeScript
+- `useState` (formulários, carrossel, renderização condicional)
+- Listas com `.map()` e `key`
+- Controlled inputs e eventos
+- Fetch API para integração com backend
+
+### Backend
+- Producer/Consumer pattern com RabbitMQ
+- Filas duráveis e mensagens persistentes
+- Worker com `prefetch(1)` e `ack`
+- CORS para comunicação cross-origin
+
+### Tailwind CSS
+- Flexbox e CSS Grid responsivo
+- Mobile-first com prefixos (`md:`, `lg:`)
+- Pseudo-elements (`after:`) para animações
+- Arbitrary values e keyframes customizados
+
+## Licença
+
+MIT
