@@ -12,13 +12,13 @@ Landing page de chocolates artesanais com sistema de newsletter integrado via me
 
 ## Visão Geral
 
-| Camada | Tecnologia | Descrição |
-|--------|-----------|-----------|
-| **Frontend** | React + Tailwind | Landing page responsiva com 7 seções |
-| **Backend** | Express + TypeScript | API REST que publica mensagens no RabbitMQ |
-| **Mensageria** | RabbitMQ | Broker de mensagens (fila `newsletter_subscriptions`) |
-| **Worker** | Node.js | Consumidor que processa inscrições da fila |
-| **Infra** | Docker Compose | Orquestra o RabbitMQ localmente |
+| Camada         | Tecnologia           | Descrição                                             |
+| -------------- | -------------------- | ----------------------------------------------------- |
+| **Frontend**   | React + Tailwind     | Landing page responsiva com 7 seções                  |
+| **Backend**    | Express + TypeScript | API REST que publica mensagens no RabbitMQ            |
+| **Mensageria** | RabbitMQ             | Broker de mensagens (fila `newsletter_subscriptions`) |
+| **Worker**     | Node.js              | Consumidor que processa inscrições da fila            |
+| **Infra**      | Docker Compose       | Orquestra o RabbitMQ localmente                       |
 
 ## Arquitetura
 
@@ -102,9 +102,9 @@ npm run dev       # App em http://localhost:5173
 
 ## Endpoints da API
 
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| `GET` | `/api/health` | Health check + status do RabbitMQ |
+| Método | Rota             | Descrição                                      |
+| ------ | ---------------- | ---------------------------------------------- |
+| `GET`  | `/api/health`    | Health check + status do RabbitMQ              |
 | `POST` | `/api/subscribe` | Inscreve email na newsletter (publica na fila) |
 
 **Exemplo:**
@@ -118,6 +118,7 @@ curl -X POST http://localhost:3001/api/subscribe \
 ## Conceitos Aplicados
 
 ### React
+
 - Componentes funcionais e componentização
 - Props com interfaces TypeScript
 - `useState` (formulários, carrossel, renderização condicional)
@@ -126,12 +127,14 @@ curl -X POST http://localhost:3001/api/subscribe \
 - Fetch API para integração com backend
 
 ### Backend
+
 - Producer/Consumer pattern com RabbitMQ
 - Filas duráveis e mensagens persistentes
 - Worker com `prefetch(1)` e `ack`
 - CORS para comunicação cross-origin
 
 ### Tailwind CSS
+
 - Flexbox e CSS Grid responsivo
 - Mobile-first com prefixos (`md:`, `lg:`)
 - Pseudo-elements (`after:`) para animações

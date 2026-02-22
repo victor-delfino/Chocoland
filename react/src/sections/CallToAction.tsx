@@ -38,14 +38,14 @@ function CallToAction() {
         ) : (
           <div>
             <span className="inline-block bg-amber-600 text-amber-100 rounded-full px-4 py-1 text-sm font-medium mb-6">
-              ⏳ Oferta por tempo limitado
+              🤝 Parceiros exclusivos
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Quer 15% de desconto no primeiro pedido?
+              Quer ganhar 15% na próxima compra de parceiros?
             </h2>
             <p className="text-amber-100 text-lg mb-10">
-              Cadastre seu e-mail e receba um cupom exclusivo. Sem spam,
-              prometemos.
+              Cadastre-se na nossa newsletter e receba cupons exclusivos de
+              marcas parceiras. Sem spam, prometemos.
             </p>
 
             <form
@@ -65,7 +65,7 @@ function CallToAction() {
                 type="submit"
                 className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all cursor-pointer shadow-lg hover:shadow-xl hover:scale-105"
               >
-                Quero meu cupom
+                Quero meus descontos
               </button>
             </form>
           </div>
