@@ -47,10 +47,19 @@ const features = [
 
 function Features() {
   return (
-    <section id="features" className="py-24 bg-amber-50 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section
+      id="features"
+      className="py-28 bg-amber-50/60 px-4 relative overflow-hidden"
+    >
+      <div className="absolute top-0 left-0 w-72 h-72 bg-amber-200/30 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-100/40 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl" />
+
+      <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <span className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-1 text-sm font-medium mb-4">
+            Nossos diferenciais
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             Por que escolher a ChocoLand?
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">

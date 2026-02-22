@@ -1,17 +1,17 @@
+import Logo from "./Logo";
+
 function Header() {
   return (
     <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="#" className="text-2xl font-bold text-amber-800">
-          🍫 ChocoLand
-        </a>
+        <Logo />
 
         <nav>
-          <ul className="flex gap-6">
+          <ul className="flex gap-8">
             <li>
               <a
                 href="#features"
-                className="text-gray-600 hover:text-amber-700 transition-colors"
+                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
               >
                 Benefícios
               </a>
@@ -19,7 +19,7 @@ function Header() {
             <li>
               <a
                 href="#cta"
-                className="text-gray-600 hover:text-amber-700 transition-colors"
+                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
               >
                 Oferta
               </a>
@@ -27,7 +27,7 @@ function Header() {
             <li>
               <a
                 href="#footer"
-                className="text-gray-600 hover:text-amber-700 transition-colors"
+                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
               >
                 Contato
               </a>

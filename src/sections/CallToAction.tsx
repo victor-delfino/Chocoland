@@ -13,8 +13,18 @@ function CallToAction() {
   };
 
   return (
-    <section id="cta" className="py-24 bg-amber-700 px-4">
-      <div className="max-w-3xl mx-auto text-center">
+    <section
+      id="cta"
+      className="py-28 bg-amber-700 px-4 relative overflow-hidden"
+    >
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-10 left-10 text-8xl">🍫</div>
+        <div className="absolute bottom-10 right-10 text-8xl">🎁</div>
+        <div className="absolute top-1/2 left-1/4 text-6xl">✨</div>
+        <div className="absolute bottom-1/3 right-1/3 text-7xl">🍫</div>
+      </div>
+
+      <div className="max-w-3xl mx-auto text-center relative">
         {submitted ? (
           <div>
             <span className="text-5xl block mb-4">🎉</span>
@@ -27,7 +37,10 @@ function CallToAction() {
           </div>
         ) : (
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <span className="inline-block bg-amber-600 text-amber-100 rounded-full px-4 py-1 text-sm font-medium mb-6">
+              ⏳ Oferta por tempo limitado
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
               Quer 15% de desconto no primeiro pedido?
             </h2>
             <p className="text-amber-100 text-lg mb-10">
@@ -45,12 +58,12 @@ function CallToAction() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 px-6 py-4 rounded-lg text-gray-900 text-lg focus:outline-none focus:ring-4 focus:ring-amber-300"
+                className="flex-1 px-6 py-4 rounded-xl text-gray-900 text-lg focus:outline-none focus:ring-4 focus:ring-amber-300 shadow-lg"
               />
 
               <button
                 type="submit"
-                className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors cursor-pointer"
+                className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all cursor-pointer shadow-lg hover:shadow-xl hover:scale-105"
               >
                 Quero meu cupom
               </button>

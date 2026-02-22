@@ -1,6 +1,6 @@
 function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white px-4 text-center">
+    <section className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-amber-50 to-white px-4 text-center">
       <span className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-1 text-md font-medium mb-6">
         Feito à mão, com amor 🍫
       </span>
