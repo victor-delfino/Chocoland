@@ -1,0 +1,15 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: chocoland-rabbitmq
+    ports:
+      - "5672:5672" # AMQP — porta que o backend usa para conectar
+      - "15672:15672" # Painel web de gerenciamento
+    environment:
+      RABBITMQ_DEFAULT_USER: chocoland
+      RABBITMQ_DEFAULT_PASS: chocoland123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_data:

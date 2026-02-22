@@ -26,6 +26,14 @@ function Header() {
             </li>
             <li>
               <a
+                href="#newsletter"
+                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
+              >
+                Newsletter
+              </a>
+            </li>
+            <li>
+              <a
                 href="#footer"
                 className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
               >

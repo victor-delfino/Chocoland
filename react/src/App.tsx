@@ -4,6 +4,7 @@ import Hero from "./sections/Hero";
 import Showcase from "./sections/Showcase";
 import Features from "./sections/Features";
 import CallToAction from "./sections/CallToAction";
+import Newsletter from "./sections/Newsletter";
 import Footer from "./sections/Footer";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Showcase />
         <Features />
         <CallToAction />
+        <Newsletter />
       </main>
       <Footer />
     </>
