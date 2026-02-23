@@ -13,6 +13,7 @@
 import express from "express";
 import cors from "cors";
 import { connectRabbitMQ, publishToQueue, QUEUES } from "./rabbitmq.js";
+import { getAllSubscribers, getSubscriberCount } from "./database.js";
 
 const app = express();
 const PORT = 3001;
@@ -70,6 +71,12 @@ async function start() {
       success: true,
       message: "Inscrição realizada com sucesso!",
     });
+  });
+
+  app.get("/api/subscribers", (_req, res) => {
+    const subscribers = getAllSubscribers();
+    const total = getSubscriberCount();
+    res.json({ total, subscribers });
   });
 
   app.listen(PORT, () => {

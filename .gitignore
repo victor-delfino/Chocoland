@@ -22,3 +22,6 @@ dist-ssr/
 
 # Docker volumes locais
 rabbitmq_data/
+
+# Banco local
+*.db

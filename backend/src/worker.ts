@@ -16,14 +16,13 @@
  * - Notificaria via webhook
  */
 import { connectRabbitMQ, QUEUES } from "./rabbitmq.js";
+import { insertSubscriber, getSubscriberCount } from "./database.js";
 
 async function startWorker() {
   const { channel } = await connectRabbitMQ();
 
   console.log("👷 Worker aguardando mensagens...\n");
 
-  // prefetch(1) → processa 1 mensagem por vez
-  // Garante que se o worker estiver lento, ele não acumula mensagens
   channel.prefetch(1);
 
   channel.consume(QUEUES.NEWSLETTER_SUBSCRIPTIONS, (msg) => {
@@ -36,15 +35,21 @@ async function startWorker() {
     console.log(`   Nome:  ${data.name}`);
     console.log(`   Email: ${data.email}`);
     console.log(`   Data:  ${data.subscribedAt}`);
-    console.log(`   Fonte: ${data.source}`);
     console.log("═══════════════════════════════════════\n");
 
-    // Simula processamento (ex: enviar email de boas-vindas)
-    console.log(`   ✉️  Simulando envio de email para ${data.email}...`);
-    console.log(`   ✅ Email de boas-vindas "enviado"!\n`);
+    try {
+      insertSubscriber(data);
+      const total = getSubscriberCount();
+      console.log(`   💾 Salvo no banco! Total de inscritos: ${total}\n`);
+    } catch (err: unknown) {
+      const error = err as { code?: string };
+      if (error.code === "SQLITE_CONSTRAINT_UNIQUE") {
+        console.log(`   ⚠️  Email ${data.email} já cadastrado — ignorando\n`);
+      } else {
+        console.error("   ❌ Erro ao salvar:", err);
+      }
+    }
 
-    // Confirma que a mensagem foi processada
-    // Sem isso, o RabbitMQ entende que falhou e reenvia
     channel.ack(msg);
   });
 }
