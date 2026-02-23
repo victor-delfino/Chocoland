@@ -49,7 +49,7 @@ function Showcase() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Conheça os melhores chocolates do mundo
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="section-subtitle">
             Tradição, sabor e história em cada mordida. Descubra as marcas que
             inspiram a nossa paixão por chocolate.
           </p>
@@ -61,7 +61,7 @@ function Showcase() {
             {/* Seta esquerda */}
             <button
               onClick={() => goTo(current - 1)}
-              className="absolute left-2 z-10 bg-white/80 hover:bg-white text-amber-800 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+              className="carousel-arrow left-2"
             >
               ‹
             </button>
@@ -79,7 +79,7 @@ function Showcase() {
             {/* Seta direita */}
             <button
               onClick={() => goTo(current + 1)}
-              className="absolute right-2 z-10 bg-white/80 hover:bg-white text-amber-800 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+              className="carousel-arrow right-2"
             >
               ›
             </button>
@@ -90,9 +90,7 @@ function Showcase() {
             key={chocolate.id}
             className="w-full lg:w-1/2 animate-[fadeIn_0.5s_ease-out]"
           >
-            <span className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-1 text-sm font-medium mb-4">
-              {chocolate.origin}
-            </span>
+            <span className="badge mb-4">{chocolate.origin}</span>
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {chocolate.name}
             </h3>

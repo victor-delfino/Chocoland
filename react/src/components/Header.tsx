@@ -9,34 +9,22 @@ function Header() {
         <nav>
           <ul className="flex gap-8">
             <li>
-              <a
-                href="#features"
-                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
-              >
+              <a href="#features" className="nav-link">
                 Benefícios
               </a>
             </li>
             <li>
-              <a
-                href="#cta"
-                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
-              >
+              <a href="#cta" className="nav-link">
                 Oferta
               </a>
             </li>
             <li>
-              <a
-                href="#newsletter"
-                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
-              >
+              <a href="#newsletter" className="nav-link">
                 Newsletter
               </a>
             </li>
             <li>
-              <a
-                href="#footer"
-                className="relative text-gray-600 font-medium hover:text-amber-700 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-700 after:transition-all hover:after:w-full"
-              >
+              <a href="#footer" className="nav-link">
                 Contato
               </a>
             </li>

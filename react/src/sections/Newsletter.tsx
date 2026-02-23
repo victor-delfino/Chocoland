@@ -72,13 +72,9 @@ function Newsletter() {
 
       <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-16">
-          <span className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-1 text-sm font-medium mb-4">
-            Newsletter semanal
-          </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-            O mundo do chocolate no seu email
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <span className="badge mb-4">Newsletter semanal</span>
+          <h2 className="section-title">O mundo do chocolate no seu email</h2>
+          <p className="section-subtitle">
             Toda semana, uma edição com curiosidades, receitas, bastidores da
             produção artesanal e novidades do universo cacau.
           </p>
@@ -122,7 +118,7 @@ function Newsletter() {
                     placeholder="Seu nome"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                    className="input-field"
                   />
                 </div>
 
@@ -140,7 +136,7 @@ function Newsletter() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                    className="input-field"
                   />
                 </div>
 

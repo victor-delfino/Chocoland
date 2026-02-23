@@ -56,13 +56,9 @@ function Features() {
 
       <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-16">
-          <span className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-1 text-sm font-medium mb-4">
-            Nossos diferenciais
-          </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-            Por que escolher a ChocoLand?
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <span className="badge mb-4">Nossos diferenciais</span>
+          <h2 className="section-title">Por que escolher a ChocoLand?</h2>
+          <p className="section-subtitle">
             Cada detalhe importa quando o assunto é chocolate de verdade.
           </p>
         </div>
