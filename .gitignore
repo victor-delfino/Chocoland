@@ -25,3 +25,5 @@ rabbitmq_data/
 
 # Banco local
 *.db
+*.db-wal
+*.db-shm

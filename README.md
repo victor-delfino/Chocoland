@@ -9,6 +9,8 @@ Landing page de chocolates artesanais com sistema de newsletter integrado via me
 ![Express](https://img.shields.io/badge/Express-5-000?logo=express)
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4-FF6600?logo=rabbitmq)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3-85EA2D?logo=swagger)
 
 ## Visão Geral
 
@@ -17,18 +19,20 @@ Landing page de chocolates artesanais com sistema de newsletter integrado via me
 | **Frontend**   | React + Tailwind     | Landing page responsiva com 7 seções                  |
 | **Backend**    | Express + TypeScript | API REST que publica mensagens no RabbitMQ            |
 | **Mensageria** | RabbitMQ             | Broker de mensagens (fila `newsletter_subscriptions`) |
-| **Worker**     | Node.js              | Consumidor que processa inscrições da fila            |
+| **Worker**     | Node.js              | Consumidor que processa inscrições e salva no SQLite  |
+| **Banco**      | SQLite               | Persistência local dos inscritos                      |
+| **Docs**       | Swagger UI           | Documentação interativa da API (`/api-docs`)          |
 | **Infra**      | Docker Compose       | Orquestra o RabbitMQ localmente                       |
 
 ## Arquitetura
 
 ```
 ┌─────────────┐  POST   ┌──────────────┐ publish ┌──────────────┐ consume ┌──────────────┐
-│   React     │────────▶│   Express    │────────▶│   RabbitMQ   │────────▶│   Worker     │
-│  (frontend) │         │   (API)      │         │   (broker)   │         │ (consumidor) │
-│  :5173      │         │  :3001       │         │  :5672       │         │              │
-└─────────────┘         └──────────────┘         └──────────────┘         └──────────────┘
-                                                  Painel: :15672
+│   React     │────────▶│   Express    │────────▶│   RabbitMQ   │────────▶│   Worker     │───────▶│   SQLite     │
+│  (frontend) │         │   (API)      │         │   (broker)   │         │ (consumidor) │        │   (banco)    │
+│  :5173      │         │  :3001       │         │  :5672       │         │              │        │ chocoland.db │
+└─────────────┘         └──────────────┘         └──────────────┘         └──────────────┘        └──────────────┘
+                                  │ /api-docs  │         Painel: :15672
 ```
 
 ## Estrutura do Projeto
@@ -46,7 +50,7 @@ Chocoland/
 │   │   │   ├── Hero.tsx            # Seção principal
 │   │   │   ├── Showcase.tsx        # Carrossel de chocolates (useState)
 │   │   │   ├── Features.tsx        # Grid de benefícios (map + key)
-│   │   │   ├── CallToAction.tsx    # Formulário com renderização condicional
+│   │   │   ├── CallToAction.tsx    # CTA com link para newsletter
 │   │   │   ├── Newsletter.tsx      # Inscrição integrada ao backend
 │   │   │   └── Footer.tsx          # Rodapé
 │   │   ├── App.tsx
@@ -57,7 +61,9 @@ Chocoland/
     ├── src/
     │   ├── server.ts               # Express — POST /api/subscribe
     │   ├── worker.ts               # Consumidor da fila RabbitMQ
-    │   └── rabbitmq.ts             # Módulo de conexão (reutilizável)
+    │   ├── rabbitmq.ts             # Módulo de conexão (reutilizável)
+    │   ├── database.ts             # SQLite — persistência dos inscritos
+    │   └── swagger.ts              # Spec OpenAPI 3.0
     ├── package.json
     └── tsconfig.json
 ```
@@ -102,10 +108,13 @@ npm run dev       # App em http://localhost:5173
 
 ## Endpoints da API
 
-| Método | Rota             | Descrição                                      |
-| ------ | ---------------- | ---------------------------------------------- |
-| `GET`  | `/api/health`    | Health check + status do RabbitMQ              |
-| `POST` | `/api/subscribe` | Inscreve email na newsletter (publica na fila) |
+| Método | Rota               | Descrição                                      |
+| ------ | ------------------ | ---------------------------------------------- |
+| `GET`  | `/api/health`      | Health check + status do RabbitMQ              |
+| `POST` | `/api/subscribe`   | Inscreve email na newsletter (publica na fila) |
+| `GET`  | `/api/subscribers` | Lista todos os inscritos do banco              |
+
+Documentação interativa: **http://localhost:3001/api-docs**
 
 **Exemplo:**
 
@@ -131,10 +140,13 @@ curl -X POST http://localhost:3001/api/subscribe \
 - Producer/Consumer pattern com RabbitMQ
 - Filas duráveis e mensagens persistentes
 - Worker com `prefetch(1)` e `ack`
+- SQLite com WAL mode para persistência
+- Swagger UI (OpenAPI 3.0) para documentação
 - CORS para comunicação cross-origin
 
 ### Tailwind CSS
 
+- `@layer components` com `@apply` para classes reutilizáveis
 - Flexbox e CSS Grid responsivo
 - Mobile-first com prefixos (`md:`, `lg:`)
 - Pseudo-elements (`after:`) para animações

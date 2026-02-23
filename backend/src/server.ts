@@ -12,8 +12,10 @@
  */
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import { connectRabbitMQ, publishToQueue, QUEUES } from "./rabbitmq.js";
 import { getAllSubscribers, getSubscriberCount } from "./database.js";
+import swaggerSpec from "./swagger.js";
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +23,7 @@ const PORT = 3001;
 // Middlewares
 app.use(cors()); // Permite requisições do frontend (cross-origin)
 app.use(express.json()); // Parseia JSON do body das requisições
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Conectar ao RabbitMQ ao iniciar
 let channel: Awaited<ReturnType<typeof connectRabbitMQ>>["channel"];
