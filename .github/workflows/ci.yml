@@ -1,0 +1,85 @@
+# CI — GitHub Actions
+#
+# Conceitos:
+# - Roda automaticamente a cada push ou pull request na branch main
+# - "on" define os gatilhos (eventos) que disparam a pipeline
+# - "jobs" são conjuntos de passos que rodam em paralelo (aqui temos 2)
+# - "services" levanta containers auxiliares (RabbitMQ) para testes de integração
+# - "steps" são executados sequencialmente dentro de cada job
+# - Cada job roda numa máquina virtual limpa (ubuntu-latest)
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ──────────────────────────────────────
+  # Job 1: Testes do Backend
+  # ──────────────────────────────────────
+  test-backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    # Services: containers que rodam junto com o job
+    # O RabbitMQ é necessário para os testes de integração
+    services:
+      rabbitmq:
+        image: rabbitmq:4-management
+        env:
+          RABBITMQ_DEFAULT_USER: chocoland
+          RABBITMQ_DEFAULT_PASS: chocoland123
+        ports:
+          - 5672:5672
+          - 15672:15672
+        # Health check — espera o RabbitMQ ficar pronto antes de rodar os testes
+        options: >-
+          --health-cmd "rabbitmq-diagnostics check_port_connectivity"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # 1. Checkout — baixa o código do repositório
+      - uses: actions/checkout@v4
+
+      # 2. Setup Node.js — instala a versão do Node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instala dependências (usa cache para ser mais rápido)
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      # 4. Roda os testes
+      - name: Run tests
+        working-directory: backend
+        run: npm test
+
+  # ──────────────────────────────────────
+  # Job 2: Build do Frontend
+  # ──────────────────────────────────────
+  build-frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: react
+        run: npm ci
+
+      # Verifica se o projeto compila sem erros
+      - name: Build
+        working-directory: react
+        run: npm run build
