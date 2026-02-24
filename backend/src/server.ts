@@ -17,16 +17,59 @@ import { connectRabbitMQ, publishToQueue, QUEUES } from "./rabbitmq.js";
 import { getAllSubscribers, getSubscriberCount } from "./database.js";
 import swaggerSpec from "./swagger.js";
 
-const app = express();
+export const app = express();
 const PORT = 3001;
 
 // Middlewares
-app.use(cors()); // Permite requisições do frontend (cross-origin)
-app.use(express.json()); // Parseia JSON do body das requisições
+app.use(cors());
+app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Conectar ao RabbitMQ ao iniciar
 let channel: Awaited<ReturnType<typeof connectRabbitMQ>>["channel"];
+
+// Health check
+app.get("/api/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    rabbitmq: channel ? "connected" : "disconnected",
+  });
+});
+
+// Endpoint de inscrição na newsletter
+app.post("/api/subscribe", async (req, res) => {
+  const { email, name } = req.body;
+
+  if (!email) {
+    res.status(400).json({ error: "Email é obrigatório" });
+    return;
+  }
+
+  const message = {
+    email,
+    name: name || "Assinante",
+    subscribedAt: new Date().toISOString(),
+    source: "landing-page",
+  };
+
+  if (channel) {
+    await publishToQueue(channel, QUEUES.NEWSLETTER_SUBSCRIPTIONS, message);
+    console.log(`📤 Mensagem publicada na fila: ${email}`);
+  } else {
+    console.log(`📝 [sem RabbitMQ] Inscrição recebida:`, message);
+  }
+
+  res.status(201).json({
+    success: true,
+    message: "Inscrição realizada com sucesso!",
+  });
+});
+
+app.get("/api/subscribers", (_req, res) => {
+  const subscribers = getAllSubscribers();
+  const total = getSubscriberCount();
+  res.json({ total, subscribers });
+});
 
 async function start() {
   try {
@@ -36,51 +79,6 @@ async function start() {
     console.error("❌ Falha ao conectar ao RabbitMQ:", err);
     console.log("⚠️  API vai rodar sem RabbitMQ (mensagens serão logadas)");
   }
-
-  // Health check
-  app.get("/api/health", (_req, res) => {
-    res.json({
-      status: "ok",
-      rabbitmq: channel ? "connected" : "disconnected",
-    });
-  });
-
-  // Endpoint de inscrição na newsletter
-  app.post("/api/subscribe", async (req, res) => {
-    const { email, name } = req.body;
-
-    if (!email) {
-      res.status(400).json({ error: "Email é obrigatório" });
-      return;
-    }
-
-    const message = {
-      email,
-      name: name || "Assinante",
-      subscribedAt: new Date().toISOString(),
-      source: "landing-page",
-    };
-
-    if (channel) {
-      // Publica na fila — o worker vai consumir depois
-      await publishToQueue(channel, QUEUES.NEWSLETTER_SUBSCRIPTIONS, message);
-      console.log(`📤 Mensagem publicada na fila: ${email}`);
-    } else {
-      // Fallback: loga no console se RabbitMQ não estiver conectado
-      console.log(`📝 [sem RabbitMQ] Inscrição recebida:`, message);
-    }
-
-    res.status(201).json({
-      success: true,
-      message: "Inscrição realizada com sucesso!",
-    });
-  });
-
-  app.get("/api/subscribers", (_req, res) => {
-    const subscribers = getAllSubscribers();
-    const total = getSubscriberCount();
-    res.json({ total, subscribers });
-  });
 
   app.listen(PORT, () => {
     console.log(`🚀 API rodando em http://localhost:${PORT}`);
