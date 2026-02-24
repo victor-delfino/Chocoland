@@ -11,6 +11,8 @@ Landing page de chocolates artesanais com sistema de newsletter integrado via me
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
 ![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
 ![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3-85EA2D?logo=swagger)
+![Vitest](https://img.shields.io/badge/Vitest-21_tests-6E9F18?logo=vitest)
+![CI](https://github.com/victor-delfino/Chocoland/actions/workflows/ci.yml/badge.svg)
 
 ## Visão Geral
 
@@ -22,6 +24,8 @@ Landing page de chocolates artesanais com sistema de newsletter integrado via me
 | **Worker**     | Node.js              | Consumidor que processa inscrições e salva no SQLite  |
 | **Banco**      | SQLite               | Persistência local dos inscritos                      |
 | **Docs**       | Swagger UI           | Documentação interativa da API (`/api-docs`)          |
+| **Testes**     | Vitest + Supertest   | testes (unitários + integração)                       |
+| **CI/CD**      | GitHub Actions       | Pipeline automático a cada push/PR                    |
 | **Infra**      | Docker Compose       | Orquestra o RabbitMQ localmente                       |
 
 ## Arquitetura
@@ -64,6 +68,10 @@ Chocoland/
     │   ├── rabbitmq.ts             # Módulo de conexão (reutilizável)
     │   ├── database.ts             # SQLite — persistência dos inscritos
     │   └── swagger.ts              # Spec OpenAPI 3.0
+    ├── tests/
+    │   ├── database.test.ts        # Testes unitários do banco
+    │   ├── server.test.ts          # Testes de integração da API
+    │   └── worker.test.ts          # Testes do processamento de mensagens
     ├── package.json
     └── tsconfig.json
 ```
@@ -123,6 +131,29 @@ curl -X POST http://localhost:3001/api/subscribe \
   -H "Content-Type: application/json" \
   -d '{"email": "teste@email.com", "name": "Hugo"}'
 ```
+
+## Testes
+
+```bash
+cd backend
+npm test            # roda todos os testes (21)
+npm run test:watch  # modo watch (re-executa ao salvar)
+```
+
+| Suíte              | Testes | Tipo       | O que cobre                                              |
+| ------------------ | ------ | ---------- | -------------------------------------------------------- |
+| `database.test.ts` | 8      | Unitário   | Insert, duplicata, listagem, ordenação, contagem         |
+| `server.test.ts`   | 8      | Integração | Endpoints HTTP (health, subscribe, subscribers, swagger) |
+| `worker.test.ts`   | 5      | Unitário   | Parse de mensagem, persistência, validações, edge cases  |
+
+## CI/CD
+
+GitHub Actions roda a cada push/PR na `main`:
+
+| Job                | O que faz                                                    |
+| ------------------ | ------------------------------------------------------------ |
+| **Backend Tests**  | Levanta RabbitMQ via services, instala deps, roda `npm test` |
+| **Frontend Build** | Instala deps e roda `npm run build` (valida compilação)      |
 
 ## Conceitos Aplicados
 
